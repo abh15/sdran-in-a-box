@@ -4,12 +4,18 @@
 # PHONY definitions
 INFRA_PHONY					:= infra-k8s infra-fabric infra-atomix infra-onos-op infra-fabric-cu-du infra-prom-op-servicemonitor
 
+infra-telemetry: $(M)/telemetry
 infra-k8s: $(M)/k8s-ready $(M)/helm-ready
 infra-fabric: $(M)/fabric
 infra-fabric-cu-du: $(M)/fabric-cu-du
 infra-atomix: $(M)/atomix
 infra-onos-op: $(M)/onos-operator
 infra-prom-op-servicemonitor: $(M)/prom-op-servicemonitor
+
+$(M)/telemetry: | $(M)/k8s-ready
+	kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.14.2/examples/kubernetes/addons/prometheus/monitoring-example.yaml || true
+	helm install cilium cilium/cilium --version 1.14.2 --namespace kube-system --set prometheus.enabled=true --set operator.prometheus.enabled=true --set hubble.enabled=true --set hubble.metrics.enableOpenMetrics=true --set hubble.metrics.enabled="{dns,drop,tcp,flow:destinationContext=pod-name;sourceContext=pod-name;labelsContext=source_ip\,destination_ip}" --wait || true
+	
 
 $(M)/k8s-ready: | $(M)/setup
 	sudo mkdir -p /etc/rancher/rke2/
@@ -56,6 +62,7 @@ $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add sdran $(HELM_SDRAN_URL)
 	helm repo add atomix https://charts.atomix.io
 	helm repo add onos https://charts.onosproject.org
+	helm repo add cilium https://helm.cilium.io
 	helm repo update
 	touch $@
 

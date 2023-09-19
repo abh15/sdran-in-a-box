@@ -26,31 +26,31 @@ $(BUILD): | $(WORKSPACE)
 	mkdir -p $(BUILD)
 
 ifeq ($(OPT), ransim)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric
 	@echo Done
 else ifeq ($(OPT), oai)
-riab: option version preliminaries infra-k8s infra-fabric routing-quagga infra-atomix infra-onos-op omec routing-omec ric oai
+riab: option version preliminaries infra-k8s infra-telemetry infra-fabric routing-quagga infra-atomix infra-onos-op omec routing-omec ric oai
 	@echo Done
 else ifeq ($(OPT), oai-ran-cu-du)
-riab: option version preliminaries infra-k8s infra-fabric-cu-du oai-enb-cu-hw oai-enb-du routing-hw-oai
+riab: option version preliminaries infra-k8s infra-telemetry infra-fabric-cu-du oai-enb-cu-hw oai-enb-du routing-hw-oai
 	@echo Done
 else ifeq ($(OPT), ric)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric routing-ric-external-ran
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric routing-ric-external-ran
 	@echo Done
 else ifeq ($(OPT), ric-e2ap101)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric routing-ric-external-ran
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric routing-ric-external-ran
 	@echo Done
 else ifeq ($(OPT), fbah)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op infra-prom-op-servicemonitor ric enable-fbah-gui
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op infra-prom-op-servicemonitor ric enable-fbah-gui
 	@echo Done
 else ifeq ($(OPT), mlb)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric
 	@echo Done
 else ifeq ($(OPT), mho)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric
 	@echo Done
 else ifeq ($(OPT), rimedots)
-riab: option version preliminaries infra-k8s infra-atomix infra-onos-op ric
+riab: option version preliminaries infra-k8s infra-telemetry infra-atomix infra-onos-op ric
 	@echo Done
 else
 riab: option version

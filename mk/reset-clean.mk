@@ -4,6 +4,8 @@
 # PHONY definitions
 RESET_CLEAN_PHONY			:= reset-oai reset-omec reset-atomix reset-onos-op reset-ric reset-fabric reset-oai-test reset-ransim-test reset-test clean clean-all reset-prom-op-servicemonitor
 
+
+	
 reset-oai:
 	helm delete -n $(RIAB_NAMESPACE) oai-enb-cu || true
 	helm delete -n $(RIAB_NAMESPACE) oai-enb-du || true
@@ -58,7 +60,7 @@ reset-onos-op:
 reset-ric:
 	helm delete -n $(RIAB_NAMESPACE) sd-ran || true
 	@until [ $$(kubectl get po -n $(RIAB_NAMESPACE) -l app=onos --no-headers | wc -l) == 0 ]; do sleep 1; done
-	kubectl delete namespace $(RIAB_NAMESPACE)
+	kubectl delete namespace $(RIAB_NAMESPACE) || true
 	cd $(M); rm -f ric
 
 reset-fabric:
@@ -78,9 +80,12 @@ reset-test: reset-oai-test reset-5gc reset-ransim-test reset-prom-op-servicemoni
 
 clean: reset-test
 	helm repo remove sdran || true
+	helm uninstall cilium -n kube-system || true
+	helm repo remove cilium || true
 	sudo /usr/local/bin/rke2-uninstall.sh || true
 	sudo rm -rf /usr/local/bin/kubectl
 	rm -rf $(M)
+
 
 clean-all: clean
 	rm -rf $(CHARTDIR)
