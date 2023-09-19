@@ -5,7 +5,10 @@
 RESET_CLEAN_PHONY			:= reset-oai reset-omec reset-atomix reset-onos-op reset-ric reset-fabric reset-oai-test reset-ransim-test reset-test clean clean-all reset-prom-op-servicemonitor
 
 
-	
+reset-telemetry:
+	helm uninstall cilium -n kube-system || true
+	helm repo remove cilium || true
+
 reset-oai:
 	helm delete -n $(RIAB_NAMESPACE) oai-enb-cu || true
 	helm delete -n $(RIAB_NAMESPACE) oai-enb-du || true
@@ -76,7 +79,7 @@ reset-prom-op-servicemonitor:
 	kubectl delete  -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.54.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml || true
 	cd $(M); rm -rf prom-op-servicemonitor
 
-reset-test: reset-oai-test reset-5gc reset-ransim-test reset-prom-op-servicemonitor reset-onos-op reset-atomix
+reset-test: reset-oai-test reset-5gc reset-ransim-test reset-prom-op-servicemonitor reset-onos-op reset-atomix reset-telemetry
 
 clean: reset-test
 	helm repo remove sdran || true
