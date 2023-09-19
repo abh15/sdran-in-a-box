@@ -7,7 +7,6 @@ RESET_CLEAN_PHONY			:= reset-oai reset-omec reset-atomix reset-onos-op reset-ric
 
 reset-telemetry:
 	helm uninstall cilium -n kube-system || true
-	helm repo remove cilium || true
 
 reset-oai:
 	helm delete -n $(RIAB_NAMESPACE) oai-enb-cu || true
